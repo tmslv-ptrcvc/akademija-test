@@ -61,10 +61,13 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+<<<<<<< HEAD
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-ldap</artifactId>
 		</dependency>
+=======
+>>>>>>> cbd93c67138f9117a1e3aa78a414686c853f6a8e
 	</dependencies>
 
 	<build>
