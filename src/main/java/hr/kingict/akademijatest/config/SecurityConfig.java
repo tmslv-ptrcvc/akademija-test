@@ -23,18 +23,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication()
-//                .passwordEncoder(passwordEncoder)
-//                .withUser("user").password(passwordEncoder.encode("User5")).roles("USER").and()
-//                .withUser("admin").password(passwordEncoder.encode("Admin123")).roles("USER", "ADMIN");
-//    }
-
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider());
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .passwordEncoder(passwordEncoder)
+                .withUser("user").password(passwordEncoder.encode("User5")).roles("USER").and()
+                .withUser("admin").password(passwordEncoder.encode("Admin123")).roles("USER", "ADMIN");
     }
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) {
+//        auth.authenticationProvider(authenticationProvider());
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
