@@ -3,7 +3,6 @@ package hr.kingict.akademijatest.service.impl;
 import hr.kingict.akademijatest.entity.Student;
 import hr.kingict.akademijatest.repository.StudentRepository;
 import hr.kingict.akademijatest.service.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -13,8 +12,11 @@ import java.util.Optional;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    @Autowired
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
+
+    public StudentServiceImpl(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     @Override
     public Student saveStudent(final Student student) {
