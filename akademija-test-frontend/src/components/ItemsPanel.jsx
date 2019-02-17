@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ItemCard from './ItemCard';
+import AdvertsPanel from './AdvertsPanel';
 
 class ItemsPanel extends Component {
     constructor(props) {
@@ -8,14 +9,17 @@ class ItemsPanel extends Component {
     }
     render() { 
         return (
-            <div class="row">
-                <ItemCard />
-                <ItemCard />
-                <ItemCard />
-                <ItemCard />
-                <ItemCard />
-                <ItemCard />
-            </div>
+            <>
+                <AdvertsPanel/>
+                <div className="row">
+                    <ItemCard />
+                    <ItemCard />
+                    <ItemCard />
+                    <ItemCard />
+                    <ItemCard />
+                    <ItemCard />
+                </div>
+            </>
         );
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -31,9 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
                 .passwordEncoder(passwordEncoder)
                 .withUser("user").password(passwordEncoder.encode("User5"))
-                .roles(RoleEnum.USER.getCode()).and()
+                    .roles(RoleEnum.USER.getCode()).and()
                 .withUser("admin").password(passwordEncoder.encode("Admin123"))
-                .roles(RoleEnum.USER.getCode(), RoleEnum.ADMIN.getCode());
+                    .roles(RoleEnum.USER.getCode(), RoleEnum.ADMIN.getCode());
     }
 
 //    @Override
@@ -62,7 +63,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .fullyAuthenticated()
                 .and()
-                .httpBasic().and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                .httpBasic()
+                .authenticationEntryPoint(restAuthenticationEntryPoint)
+                    .and()
+                .cors()
+                    .and()
                 .csrf().disable();
     }
 }

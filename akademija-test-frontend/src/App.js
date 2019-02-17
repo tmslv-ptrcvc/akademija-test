@@ -1,44 +1,45 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Route, Redirect, Switch } from "react-router-dom";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Footer from './components/Footer';
-import AdvertsPanel from './components/AdvertsPanel';
-import ItemsPanel from './components/ItemsPanel';
-import ItemDetails from './components/ItemDetails';
-import Navbar from './components/Navbar';
+import Marketplace from './components/Marketplace';
+import Login from './components/Login';
+
+/**
+ * TODO
+ */
+export const Auth = {
+  isAuthenticated: false,
+  authenticate(cb){
+    this.isAuthenticated = true
+  },
+  signout(cb){
+    this.isAuthenticated = false
+  }
+}
+
+/**
+ * Create custom private Route for authenticated part of app.
+ * 
+ * @param {*} param0 
+ */
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={(props) => (
+    Auth.isAuthenticated === true
+    ? <Component {...props} />
+    : <Redirect to={{ pathname: "/login", state: { from: props.location } }}
+  />
+  )} />
+)
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <Router>
-            <>
-            <Navbar />
-            <div className="container">
-              <div className="row">
-                  <div className="col-lg-3">
-                    <h1 className="my-4">Shop Name</h1>
-                    <div className="list-group">
-                        <Link className="list-group-item" to="/items-panel">Items</Link>
-                        <Link className="list-group-item" to="/item-details">Item details</Link>
-                        <a href="." className="list-group-item">Category 3</a>
-                    </div>
-                  </div>
-                  <div className="col-lg-9">
-                    <Route exact path="/items-panel" component={() => (
-                      <>
-                        <AdvertsPanel />
-                        <ItemsPanel />
-                      </>
-                    )} />
-                    <Route exact path="/item-details" component={ItemDetails} />
-                  </div>
-              </div>
-            </div>
-            </>
-        </Router>
-        <Footer />
+        <Switch>
+          <Route path='/login' component={Login} />
+          <PrivateRoute path='/' component={Marketplace} />
+        </Switch>
       </div>
     );
   }

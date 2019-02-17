@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import { Auth } from '../App';
 
 class Navbar extends Component {
     constructor(props) {
         super(props);
         this.state = {  }
     }
+
+    logout = async () => {
+        await Auth.signout();
+        this.props.history.push("/login");
+    }
+
     render() { 
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -26,7 +33,7 @@ class Navbar extends Component {
                                 <Link className="nav-link" to="/services">Services</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/contact">Contact</Link>
+                                <Link to="/" className="nav-link" onClick={this.logout}>Sing Out</Link>
                             </li>
                         </ul>
                     </div>
@@ -36,4 +43,4 @@ class Navbar extends Component {
     }
 }
  
-export default Navbar;
+export default withRouter(Navbar);

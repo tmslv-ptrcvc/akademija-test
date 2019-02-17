@@ -1,11 +1,53 @@
 import React, { Component } from 'react';
+import { handleChange } from '../utils';
+import { Redirect } from "react-router-dom";
+import { Auth } from '../App';
+import axios from 'axios';
 
 class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = {  }
+        this.state = {
+            redirect: false,
+            username: '',
+            password: '',
+            error: ''
+        }
+
+        // events
+        this.handleChange = handleChange.bind(this)
     }
+
+    login = () => {
+        let self = this;
+
+        axios.post('/api/user/info', {
+            withCredentials: true,
+            auth: {
+                // username: this.state.username,
+                // password: this.state.password
+                username: 'user',
+                password: 'User5'
+            },
+        }).then(function (response) {
+            console.log(response.data.principal);
+            // izvuci autentificiranog korisnika iz responsa i spremi ga u Auth
+            Auth.authenticate();
+            self.setState({ redirect: true })
+
+        }).catch(function (error) {
+            console.log(error.response.data || error);
+            self.setState({ error: error.response.data.message })
+        });
+    }
+
     render() { 
+        const { from } = this.props.location.state || { from: { pathname: "/" } };
+
+        if (this.state.redirect){
+            return <Redirect to={from} />
+        }
+
         return (
             <div className="container py-5">
                 <div className="row">
@@ -18,19 +60,16 @@ class Login extends Component {
                                         <h2 className="mb-0">Login</h2>
                                     </div>
                                     <div className="card-body">
-                                        <form className="form" role="form" autocomplete="off" id="formLogin" novalidate="" method="POST">
-                                            <div className="form-group text-left">
-                                                <label for="username">Username</label>
-                                                <input type="text" className="form-control rounded-1" name="username" id="username" required=""/>
-                                                <div className="invalid-feedback">Oops, you missed this one.</div>
-                                            </div>
-                                            <div className="form-group text-left">
-                                                <label>Password</label>
-                                                <input type="password" className="form-control rounded-1" id="password" required="" autocomplete="new-password"/>
-                                                <div className="invalid-feedback">Enter your password too!</div>
-                                            </div>
-                                            <button type="submit" className="btn btn-primary float-right" id="btnLogin">Prijavi se</button>
-                                        </form>
+                                        <div className="form-group text-left">
+                                            <label>Username</label>
+                                            <input type="text" className="form-control rounded-1" name="username" value={this.state.username} onChange={this.handleChange} />
+                                        </div>
+                                        <div className="form-group text-left">
+                                            <label>Password</label>
+                                            <input type="password" className="form-control rounded-1" name="password" value={this.state.password} onChange={this.handleChange} />
+                                            <div className="invalid-feedback d-block">{this.state.error}</div>
+                                        </div>
+                                        <button className="btn btn-primary float-right" onClick={this.login}>Prijavi se</button>
                                     </div>
                                 </div>
                             </div>

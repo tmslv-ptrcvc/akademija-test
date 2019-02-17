@@ -3,10 +3,7 @@ package hr.kingict.akademijatest.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -22,8 +19,8 @@ public class UserController {
      * @param principal
      * @return podatke o ulogiranom korisniku
      */
-    @GetMapping("/info")
-    @Secured("USER")
+    @PostMapping("/info")
+    @Secured("ROLE_USER")
     public ResponseEntity<?> getUserInfo(Principal principal){
         return new ResponseEntity<>(principal, HttpStatus.OK);
     }
